@@ -1,7 +1,6 @@
 package com.spring.crud.springcrudapp.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.spring.crud.springcrudapp.exception.ResourceNotFoundException;
 import com.spring.crud.springcrudapp.model.Employee;
@@ -25,7 +24,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee saveEmployee(Employee employee) {
-        // TODO Auto-generated method stub
         return employeeRepository.save(employee);
     }
 
@@ -47,6 +45,28 @@ public class EmployeeServiceImpl implements EmployeeService {
         // use lambda expression to implement the above logic
         return employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee", "id", id));
 
+    }
+
+    @Override
+    public Employee updateEmployee(Employee employee, long id) {
+        // check if the employee with the given id exists
+
+        Employee existingEmploye = employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee", "id", id));
+
+        // update the exising employee
+
+        existingEmploye.setFirstName(employee.getFirstName());
+        existingEmploye.setLastName(employee.getLastName());
+        existingEmploye.setEmail(employee.getEmail());
+        employeeRepository.save(existingEmploye);
+
+        return existingEmploye;
+    }
+
+    @Override
+    public void deleteEmployee(long id) {
+        employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee", "id", id));
+        employeeRepository.deleteById(id);      
     }
 
 }
